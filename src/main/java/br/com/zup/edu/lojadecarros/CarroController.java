@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -23,12 +24,12 @@ public class CarroController {
     private CarroRepository carroRepository;
 
     @PostMapping("/carro")
-    public ResponseEntity<?> cadastra(@RequestBody CarroRequest carroRequest,
+    public ResponseEntity<?> cadastra(@RequestBody @Valid CarroRequest carroRequest,
                                       UriComponentsBuilder uriComponentsBuilder){
-//        if(carroRepository.existsByChassi(carroRequest.getChassi())){
-//            throw  new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Carro já existente!!!");
-//
-//        }
+        if(carroRepository.existsByChassi(carroRequest.getChassi())){
+            throw  new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Carro já existente!!!");
+
+        }
 
         Carro carro = carroRequest.toModel();
         carroRepository.save(carro);
